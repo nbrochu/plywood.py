@@ -6,8 +6,6 @@ from logger import *
 from listener import *
 from server import *
 
-__version__ = "0.1b"
-
 
 class PlywoodException(BaseException):
     pass

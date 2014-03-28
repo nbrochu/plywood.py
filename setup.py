@@ -1,19 +1,20 @@
 #!/usr/bin/env python
 import os
 
-from plywood.plywood import __version__
-
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
+
+with open(os.path.join(os.path.dirname(__file__), 'VERSION')) as f:
+    version = f.read()
 
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as f:
     long_description = f.read()
 
 setup(
     name='plywood-python',
-    version=__version__,
+    version=version,
     description='Logstash Websocket Multiplexer (Python)',
     long_description=long_description,
     url='http://github.com/nbrochu/plywood.py',
