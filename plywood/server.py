@@ -35,7 +35,7 @@ class PlywoodWebSocketServer(object):
    
     @classmethod
     def execute(self):
-        factory = WampServerFactory("ws://localhost:8998", debug = False, debugWamp = False)
+        factory = WampServerFactory("ws://localhost:17998", debug = False, debugWamp = False)
         factory.protocol = PlywoodWebSocketServerProtocol
         factory.setProtocolOptions(allowHixie76 = True)
 
@@ -58,7 +58,7 @@ class PlywoodServer(multiprocessing.Process):
         signal.signal(signal.SIGINT, signal.SIG_IGN)
 
         self.logging_socket = self.create_logging_socket()
-        self.log("Plywood WebSocket Server started on port 8998...", style="success")
+        self.log("Plywood WebSocket Server started on port 17998...", style="success")
 
         self._reactor_thread = threading.Thread(target=PlywoodWebSocketServer.execute, args=())
         self._reactor_thread.daemon = True
@@ -84,7 +84,7 @@ class PlywoodServer(multiprocessing.Process):
 
     def create_logging_socket(self):
         socket = zmq.Context().socket(zmq.REQ)
-        socket.connect("tcp://127.0.0.1:7991")
+        socket.connect("tcp://127.0.0.1:17991")
 
         return socket
 

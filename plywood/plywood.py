@@ -17,7 +17,7 @@ class Plywood(object):
         self._zmq_context = zmq.Context()
 
         self.socket = self._zmq_context.socket(zmq.REP)
-        self.socket.bind("tcp://127.0.0.1:7990")
+        self.socket.bind("tcp://127.0.0.1:17990")
 
         logging.basicConfig(level=logging.DEBUG, format="")
         self.logger = logging.getLogger("plywood")

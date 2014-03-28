@@ -19,7 +19,7 @@ class PlywoodListener(multiprocessing.Process):
         signal.signal(signal.SIGINT, signal.SIG_IGN)
 
         self.logging_socket = self.create_logging_socket()
-        self.log("Plywood listening on port 7999...", style="success")
+        self.log("Plywood listening on port 17999...", style="success")
 
         self.create_server_socket()
 
@@ -50,13 +50,13 @@ class PlywoodListener(multiprocessing.Process):
 
     def create_logging_socket(self):
         socket = zmq.Context().socket(zmq.REQ)
-        socket.connect("tcp://127.0.0.1:7991")
+        socket.connect("tcp://127.0.0.1:17991")
 
         return socket
 
     def create_server_socket(self):
         self.socket = zmq.Context().socket(zmq.REP)
-        self.socket.bind("tcp://0.0.0.0:7999")
+        self.socket.bind("tcp://0.0.0.0:17999")
 
     def process_message(self, message):
         self.log(message)

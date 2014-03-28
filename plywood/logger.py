@@ -45,11 +45,11 @@ class PlywoodLogger(multiprocessing.Process):
 
     def create_server_socket(self):
         self.socket = zmq.Context().socket(zmq.REP)
-        self.socket.bind("tcp://127.0.0.1:7991")
+        self.socket.bind("tcp://127.0.0.1:17991")
 
     def create_client_socket(self):
         socket = zmq.Context().socket(zmq.REQ)
-        socket.connect("tcp://127.0.0.1:7990")
+        socket.connect("tcp://127.0.0.1:17990")
 
         return socket
 
