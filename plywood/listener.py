@@ -21,7 +21,7 @@ class PlywoodListener(multiprocessing.Process):
         self.logging_socket = self.create_logging_socket()
         self.log("Plywood listening on port 17999...", style="success")
 
-        self.create_server_socket()
+        self.create_subscriber_socket()
 
         poller = zmq.Poller()
         poller.register(self.socket, zmq.POLLIN)
@@ -54,9 +54,11 @@ class PlywoodListener(multiprocessing.Process):
 
         return socket
 
-    def create_server_socket(self):
-        self.socket = zmq.Context().socket(zmq.REP)
-        self.socket.bind("tcp://0.0.0.0:17999")
+    def create_subscriber_socket(self):
+        self.socket = zmq.Context().socket(zmq.SUB)
+        self.socket.bind("tcp://127.0.0.1:17999")
+
+        self.socket.setsockopt(zmq.SUBSCRIBE, "plywood")
 
     def process_message(self, message):
         self.log(message)
