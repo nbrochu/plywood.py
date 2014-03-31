@@ -56,7 +56,7 @@ class PlywoodListener(multiprocessing.Process):
 
     def create_subscriber_socket(self):
         self.socket = zmq.Context().socket(zmq.SUB)
-        self.socket.bind("tcp://127.0.0.1:17999")
+        self.socket.bind("tcp://0.0.0.0:17999")
 
         self.socket.setsockopt(zmq.SUBSCRIBE, "plywood")
 
