@@ -1,27 +1,25 @@
 import os
-import threading
 import multiprocessing
 import zmq
 import signal
 
 from logger import *
-from client import *
 
 
-class PlywoodConsumer(multiprocessing.Process):
+class PlywoodConsumerPool(multiprocessing.Process):
 
     def __init__(self, **params):
-        super(PlywoodConsumer, self).__init__()
+        super(PlywoodConsumerPool, self).__init__()
         self._stop = multiprocessing.Event()
 
-        self.web_socket_client = None
+        self.pool_size = params.get("pool_size") or 4
+        self.consumers = None
+
         self.logging_socket = None
 
     def run(self):
         signal.signal(signal.SIGINT, signal.SIG_IGN)
-
         self.logging_socket = self.create_logging_socket()
-        self.web_socket_client = PlywoodClient()
 
     def shutdown(self):
         self._stop.set()
@@ -38,5 +36,18 @@ class PlywoodConsumer(multiprocessing.Process):
 
         return socket
 
+    def _initialize_consumers(self):
+        pass  # Implement in child classes
+
     def _origin(self):
         return "%s-%s" % (self.__class__.__name__, os.getpid())
+
+    @classmethod
+    def initialize(self, consumer_type="redis", pool_size=4):
+        from consumer_pools import *
+
+        consumer_pool_class_mappings = {
+            "redis": PlywoodRedisConsumerPool
+        }
+
+        return consumer_pool_class_mappings[consumer_type](pool_size=pool_size)

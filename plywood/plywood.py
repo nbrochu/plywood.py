@@ -3,7 +3,7 @@ import zmq
 import logging
 
 from logger import *
-from listener import *
+from consumer_pool import *
 from server import *
 
 
@@ -13,7 +13,7 @@ class PlywoodException(BaseException):
 
 class Plywood(object):
 
-    def __init__(self):
+    def __init__(self, **params):
         self._zmq_context = zmq.Context()
 
         self.socket = self._zmq_context.socket(zmq.REP)
@@ -23,7 +23,7 @@ class Plywood(object):
         self.logger = logging.getLogger("plywood")
 
         self.plywood_logger = None
-        self.plywood_listener = None
+        self.plywood_consumer_pool = None
         self.plywood_server = None
 
     def run(self):
@@ -36,9 +36,9 @@ class Plywood(object):
 
             self.plywood_logger.start()
 
-            # Start the Plywood Listener as a Process
-            self.plywood_listener = PlywoodListener()
-            self.plywood_listener.start()
+            # Start the Plywood Consumer Pool as a Process
+            self.plywood_consumer_pool = PlywoodConsumerPool.initialize(consumer_type="redis")
+            self.plywood_consumer_pool.start()
 
             # Start the Plywood WebSocket Server as a Process
             self.plywood_server = PlywoodServer()
@@ -56,7 +56,7 @@ class Plywood(object):
             stopping_message = PlywoodLogger.prepare_log("Plywood STOPPING...", "Plywood-%s" % os.getpid(), "success")
             self.logger.info(self.plywood_logger.wrap_message(stopping_message))
 
-            self.plywood_listener.shutdown()
+            self.plywood_consumer_pool.shutdown()
             self.plywood_server.shutdown()
 
             # Listen for messages for up to 10 seconds before shutting down the logger

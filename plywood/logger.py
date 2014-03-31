@@ -39,7 +39,6 @@ class PlywoodLogger(multiprocessing.Process):
 
                 self.socket.send("ACK")
 
-
     def shutdown(self):
         self._stop.set()
 

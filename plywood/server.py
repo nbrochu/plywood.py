@@ -1,5 +1,4 @@
 import os
-import sys
 import threading
 import multiprocessing
 import signal
@@ -13,22 +12,14 @@ from twisted.internet import reactor
  
 from autobahn.twisted.websocket import listenWS
 
-from autobahn.wamp1.protocol import exportRpc
 from autobahn.wamp1.protocol import WampServerFactory
 from autobahn.wamp1.protocol import WampServerProtocol
 
  
 class PlywoodWebSocketServerProtocol(WampServerProtocol):
-
-    # Need logging
  
     def onSessionOpen(self):
-        self.registerForRpc(self)
         self.registerForPubSub("plywood#", True)
-
-    @exportRpc("updateAvailableLogs")
-    def update_available_logs(self):
-        pass
 
 
 class PlywoodWebSocketServer(object):
@@ -65,7 +56,6 @@ class PlywoodServer(multiprocessing.Process):
         self._reactor_thread.start()
 
         while not self._stop.is_set():
-            self.log("Plywood!", style="warning")
             time.sleep(1)
 
         reactor.callFromThread(reactor.stop)

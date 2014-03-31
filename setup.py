@@ -27,7 +27,8 @@ setup(
     packages=['plywood'],
     install_requires=[
         'pyzmq==14.1.1',
-        'autobahn[twisted]==0.8.6'
+        'autobahn[twisted]==0.8.6',
+        'redis==2.9.1'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
